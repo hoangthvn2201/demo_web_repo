@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.min.css" />
+    <h1 class="title">
+    DENSO - LOGIN PAGE
+    </h1>
+    <h2 class="subtitle">
+    Crafting the Core
+    </h2> -->
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif; /* Adjust this to match the closest font */
+            background-color: #fff; /* No background image */
+            color: #333;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+        }
+
+        .container {
+            text-align: center;
+            padding: 40px;
+        }
+
+        h1.title {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #D50000; /* Red color for "DENSO" */
+            font-family: 'Arial', sans-serif; /* Adjust font to match the image */
+        }
+
+        h2.subtitle {
+            font-size: 1.5rem;
+            font-weight: 400;
+            color: #D50000; /* Red color for "Crafting the Core" */
+            font-family: 'Arial', sans-serif; /* Adjust font to match the image */
+        }
+
+        .login-button {
+            padding: 10px 30px;
+            font-size: 1.2rem;
+            color: #fff;
+            background-color: #ff5c5c;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .login-button:hover {
+            background-color: #ff4444;
+        }
+    </style>
+
+    <div class="container">
+        <h1 class="title">DENSO</h1>
+        <h2 class="subtitle">Crafting the Core</h2>
+        <a href="{{ url_for('auth.login') }}" class="login-button">Login</a>
+        <a href="{{ url_for('auth.signup') }}" class="login-button">Sign Up</a>
+    </div>
+{% endblock %}

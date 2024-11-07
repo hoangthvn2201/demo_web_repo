@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <h1>Biểu đồ Đổi mới sáng tạo</h1>
+        
+    <div id="bar-chart"></div>
+    <div id="line-chart"></div>
+    <div id="pie-chart"></div>
+
+    <script>
+        var barChart = JSON.parse({{ charts.bar_chart | tojson }});
+        var lineChart = JSON.parse({{ charts.line_chart | tojson }});
+        var pieChart = JSON.parse({{ charts.pie_chart | tojson }});
+
+        Plotly.newPlot('bar-chart', barChart.data, barChart.layout);
+        Plotly.newPlot('line-chart', lineChart.data, lineChart.layout);
+        Plotly.newPlot('pie-chart', pieChart.data, pieChart.layout);
+    </script>
+{% endblock %}

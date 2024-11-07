@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h3 class="mt-4 mb-4"></i>Chỉnh sửa đề xuất</h3>
+    <form method="post">
+        <p>
+            <label for="requester">Người đề xuất</label>
+            <input type="text" name="requester"
+                   value = "{{ qa.requester }}"
+                   placeholder="requester">
+            </input>
+        </p>
+
+        <p>
+            <label for="task_type">Loại hình công việc</label>
+            <input type="text" name="task_type"
+                   value = "{{ qa.task_type }}"
+                   placeholder="task_type">
+            </input>
+        </p>
+
+        <p>
+            <label for="task">Công việc</label>
+            <input type="text" name="task"
+                   value = "{{ qa.task }}"
+                   placeholder="task">
+            </input>
+        </p>
+
+        <p>
+            <label for="problem">Vấn đề/khó khăn còn gặp phải</label>
+            <input type="text" name="problem"
+                   value = "{{ qa.problem }}"
+                   placeholder="problem">
+            </input>
+        </p>
+
+        <p>
+            <label for="frequency">Tần suất đối ứng</label>
+            <input type="text" name="frequency"
+                   value = "{{ qa.frequency }}"
+                   placeholder="frequency">
+            </input>
+        </p>
+
+        <p>
+            <label for="num_hours">Số giờ đối ứng</label>
+            <input type="text" name="num_hours"
+                   value = "{{ qa.num_hours }}"
+                   placeholder="num_hours">
+            </input>
+        </p>
+
+        <p>
+            <label for="deadline_to_feedback">Thời hạn nhận phản hồi</label>
+            <input type="text" name="deadline_to_feedback"
+                   value = "{{ qa.deadline_to_feedback }}"
+                   placeholder="deadline_to_feedback">
+            </input>
+        </p>
+
+        <p>
+            <button type="submit">Submit</button>
+        </p>
+    </form>
+{% endblock %}

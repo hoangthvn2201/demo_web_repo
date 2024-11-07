@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <h3 class="mt-4 mb-4"></i>{{ jidouka.innovation_name }}</h3>
+    <div class="content">
+            <div class="student">
+                <p><b>#{{ jidouka.id }}</b></p>
+                <b>
+                    <p class="name">{{ jidouka.innovation_name }} </p>
+                </b>
+                <p>Thể loại công việc: {{ jidouka.task_type }}</p>
+                <p>Công cụ áp dụng: {{ jidouka.tool }}</p>
+                <p>Mô tả chi tiết cải tiến: {{ jidouka.describe_innovation }}</p>
+                <p>Phần mềm áp dụng: {{ jidouka.software }}</p>
+                <p>Sản phẩm đầu ra: {{ jidouka.product }}</p>
+                <p>PIC: {{ jidouka.pic }}</p>
+                <p>DC: {{ jidouka.dc }}</p>
+                <p>Số lượng công việc áp dụng cải tiến: {{ jidouka.num_tasks }}</p>
+                <p>Tổng thời gian tiết kiệm được: {{ jidouka.saved_hours }}</p>
+                <p>Created: {{ jidouka.created_at }}</p>
+                <div class="bio">
+                    <h4>Bio</h4>
+                    <p>{{ jidouka.information }}</p>
+                </div>
+            </div>
+    </div>
+{% endblock %}

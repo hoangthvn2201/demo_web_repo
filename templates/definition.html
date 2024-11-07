@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block content %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+            margin-bottom: 15px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            min-width: 1000px; 
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+
+        .main-header {
+            background-color: #e6ffe6;
+        }
+
+        .sub-header {
+            background-color: #f2f2f2;
+        }
+
+        .centered {
+            text-align: center;
+        }
+
+        .btn {
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, .25);
+        }
+</style>
+<!-- <div class="container-fluid"> -->
+<div class="content">
+    <div class="col-md-10 main-content">
+        <h3 class="mt-4 mb-4">DANH SÁCH ĐỊNH NGHĨA VÀ CÁCH DÙNG CÁC TOOL</h3>
+
+        <div class="d-flex flex-wrap align-items-center mb-4">
+
+
+            <div class="me-3 mb-3">
+                <a href="{{ url_for('main.create_tool') }}" id="add-new" class="btn btn-success"><i class="fas fa-plus me-1"></i>Thêm mới</a>
+            </div>
+
+
+        </div>
+
+        <!-- <div class="table-responsive"> -->
+        <div>
+            <table>
+                <thead>
+                    <tr class="main-header">
+                        <th>No</th>
+                        <th>Công cụ</th>
+                        <th>Created At</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for defi in define %}
+                    <tr>
+                        
+                        <td>{{ defi.id }}</td>
+                        <td>
+                            <b>
+                                <p class="name">
+                                    <a href="{{ url_for('main.tool', define_id=defi.id)}}">
+                                        {{ defi.tool }} 
+                                    </a>
+                                </p>
+                            </b>
+                        </td>
+                        <td>{{defi.created_at}}</td>
+                        <td>
+                            <a href="{{ url_for('main.edit_tool', define_id=defi.id) }}">Edit</a>
+                            <hr>
+                            <form method="POST"
+                                    action="{{ url_for('main.delete_tool', define_id=defi.id) }}">
+                                <input type="submit" value="Delete Tool"
+                                    onclick="return confirm('Bạn có muốn xóa công cụ này?')">
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</div>
+{% endblock %}

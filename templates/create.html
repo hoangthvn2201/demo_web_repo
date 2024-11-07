@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <style>
+        .input {
+            width: 15;
+            height: 60;
+        }
+    </style>
+    <h1 style="width: 100%">{% block title %} Thêm công việc cải tiến {% endblock %}</h1>
+    <form method="post">
+        <p>
+            <label for="innovation_name">Tên cải tiến</label>
+            <input type="text" name="innovation_name"
+                   placeholder="innovation name">
+            </input>
+        </p>
+
+        <p>
+            <label for="task_type">Thể loại công việc</label>
+            <input type="text" name="task_type"
+                   placeholder="Task type">
+            </input>
+        </p>
+        <p>
+            <label for="tool">Công cụ cải tiến</label>
+            <input type="text" name="tool"
+                   placeholder="tool">
+            </input>
+        </p>
+        <p>
+            <label for="describe_innovation">Mô tả chi tiết nội dung cải tiến</label>
+            <input type="text" name="describe_innovation"
+                   placeholder="Describe innovation">
+            </input>
+        </p>
+
+        <p>
+            <label for="software">Phần mềm áp dụng</label>
+            <input type="text" name="software"
+                   placeholder="Software">
+            </input>
+        </p>
+
+        <p>
+            <label for="product">Sản phẩm áp dụng</label>
+            <input type="text" name="product"
+                   placeholder="Product">
+            </input>
+        </p>
+
+        <p>
+            <label for="pic">PIC</label>
+            <input type="text" name="pic"
+                   placeholder="PIC">
+            </input>
+        </p>
+
+        <p>
+            <label for="dc">DC</label>
+            <input type="text" name="dc"
+                   placeholder="DC">
+            </input>
+        </p>
+
+        <p>
+            <label for="num_tasks">Số lượng công việc áp dụng</label>
+            <input type="text" name="num_tasks"
+                   placeholder="Num tasks">
+            </input>
+        </p>
+
+        <p>
+            <label for="saved_hours">Tổng số giờ tiết kiệm được</label>
+            <input type="text" name="saved_hours"
+                   placeholder="Saved hours">
+            </input>
+        </p>
+
+        <p>
+        <label for="description">Thông tin thêm</label>
+        <br>
+        <textarea name="description"
+                  placeholder="Description"
+                  rows="15"
+                  cols="60"
+                  ></textarea> 
+        </input>
+        </p>
+        <p>
+            <button type="submit">Submit</button>
+        </p>
+    </form>
+{% endblock %}

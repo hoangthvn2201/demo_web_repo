@@ -1,0 +1,19 @@
+qna table:
+-id         ###requester part  
+-requester  Người yêu cầu
+-task_type  Loại hình công việc
+-task       Tên công việc
+-problem    Điểm khó khăn/Vấn đề gặp phải
+-frequency  Tần suất đối ứng
+-num_hours  Số giờ đối ứng 
+-pdf (X)    
+-deadline_to_feedback Thời gian mong muốn nhận phản hồi
+
+#responser part 
+-content Nội dung
+-time    Thời gian
+-result  Kết quả 
+-feedback Feedback 
+
+
+

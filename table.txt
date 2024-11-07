@@ -1,0 +1,6 @@
+id  /         cải tiến            /  thể loại công việc  /        công cụ          /   sản phẩm   /  người tạo  /  bộ phận
+1       python xử lí dữ liệu          xử lí dữ liệu         python, VSC               file csv      Anh A         DC1
+2       excel nhập data               nhập dữ liệu          excel, python             file excel    Anh B         DC2 
+3       tự động tải file              xử lí file            window, python            thư mục       Anh C         DC3 
+4       tự động phân tích             phân tích             python, pandas            file csv      Anh D         DC1
+5       cải tiến quy trình            năng suất             chân, tay                 tiền          Anh A         DC2

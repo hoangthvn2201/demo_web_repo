@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h3 class="mt-4 mb-4"></i>Phản hồi</h3>
+    <form method="post">
+        <p>
+            <label for="requester">Người đề xuất</label>
+            {{qa.requester}}
+        </p>
+
+        <p>
+            <label for="task_type">Loại hình công việc</label>
+            {{qa.task_type}}
+        </p>
+
+        <p>
+            <label for="task">Công việc</label>
+            {{qa.task}}
+        </p>
+
+        <p>
+            <label for="problem">Vấn đề/khó khăn còn gặp phải</label>
+            {{qa.problem}}
+        </p>
+
+        <p>
+            <label for="frequency">Tần suất đối ứng</label>
+            {{qa.frequency}}
+        </p>
+
+        <p>
+            <label for="num_hours">Số giờ đối ứng</label>
+            {{qa.num_hours}}
+        </p>
+
+        <p>
+            <label for="deadline_to_feedback">Thời hạn nhận phản hồi</label>
+            {{qa.deadline_to_feedback}}
+        </p>
+
+        <p>
+            <label for="content">Nội dung</label>
+            <input type="text" name="content"
+                placeholder="content">
+            </input>
+        </p>
+
+        <p>
+            <label for="result">Kết quả</label>
+            <input type="text" name="result"
+                placeholder="result">
+            </input>
+        </p>
+
+        <p>
+            <label for="feedback">Feedback</label>
+            <input type="text" name="feedback"
+                placeholder="feedback">
+            </input>
+        </p>
+
+        <p>
+            <button type="submit">Submit</button>
+        </p>
+    </form>
+{% endblock %}

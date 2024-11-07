@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <div class="chat-container">
+        <div class="chat-header">
+            <h1>Chatbot</h1>
+        </div>
+        <div class="chat-box" id="chat-box">
+            {% for entry in history %}
+                <div class="user-message"><span>{{ entry.timestamp }}</span> {{ entry.user }}</div>
+                <div class="bot-message"><span>{{ entry.timestamp }}</span> {{ entry.bot }}</div>
+            {% endfor %}
+            <div id="typing-indicator" class="bot-message" style="display: none;">Đang gõ...</div>
+        </div>
+        <form id="chat-form">
+            <input type="text" id="user-input" placeholder="Nhập tin nhắn..." autocomplete="off" required>
+            <button type="submit">Gửi</button>
+            <button type="button" id="clear-chat">🗑️</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById("chat-form").addEventListener("submit", async function(event) {
+            event.preventDefault();
+            const userInput = document.getElementById("user-input").value;
+            const chatBox = document.getElementById("chat-box");
+            // Hiển thị tin nhắn người dùng
+            const timestamp = new Date().toLocaleTimeString();
+            chatBox.innerHTML += `<div class="user-message"><span>${timestamp}</span> ${userInput}</div>`;
+            document.getElementById("user-input").value = "";
+            // Hiển thị trạng thái "đang gõ..."
+            const typingIndicator = document.getElementById("typing-indicator");
+            typingIndicator.style.display = "block";
+            // Gửi tin nhắn đến server
+            const response = await fetch("/chat", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ message: userInput })
+            });
+            const data = await response.json();
+            // Ẩn trạng thái "đang gõ..." và hiển thị phản hồi bot
+            typingIndicator.style.display = "none";
+            chatBox.innerHTML += `<div class="bot-message"><span>${data.timestamp}</span> ${data.response}</div>`;
+            chatBox.scrollTop = chatBox.scrollHeight;
+        });
+        // Xóa lịch sử chat
+        document.getElementById("clear-chat").addEventListener("click", async function() {
+            const response = await fetch("/clear", { method: "POST" });
+            if (response.ok) {
+                document.getElementById("chat-box").innerHTML = ""; // Xóa nội dung chat-box
+            }
+        });
+    </script>
+{% endblock %}

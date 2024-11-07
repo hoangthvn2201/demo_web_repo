@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h3 class="mt-4 mb-4"></i>DANH SÁCH ĐỊNH NGHĨA VÀ CÁCH DÙNG TOOL</h3>
+    <form method="post">
+        <p>
+            <label for="tool">Tên công cụ</label>
+            <input type="text" name="tool"
+                   value="{{ define.tool }}"
+                   placeholder="tool name">
+            </input>
+        </p>
+
+        <p>
+        <label for="description">mô tả chi tiết</label>
+        <br>
+        <textarea name="description"
+                  placeholder="Description"
+                  rows="15"
+                  cols="60"
+                  
+                  >{{ define.description }}</textarea>
+        </p>
+        <p>
+            <button type="submit">Submit</button>
+        </p>
+    </form>
+{% endblock %}

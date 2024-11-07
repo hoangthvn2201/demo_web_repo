@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <h3 class="mt-4 mb-4"></i>{{ definition.tool }}</h3>
+    <div class="content">
+            <div class="student">
+                <p><b>#{{ definition.id }}</b></p>
+                <b>
+                    <p class="name">{{ definition.tool }} </p>
+                </b>
+                <p>Created: {{ definition.created_at }}</p>
+                <div class="bio">
+                    <h4>Bio</h4>
+                    <p>{{ definition.description }}</p>
+                </div>
+            </div>
+    </div>
+{% endblock %}
