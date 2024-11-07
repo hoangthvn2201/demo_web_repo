@@ -55,9 +55,76 @@ login_manager.init_app(app)
 
 #=========import chatbot==============
 # chatbot = pipeline("table-question-answering", model='google/tapas-large-finetuned-wtq')
-model_path = "phamhai/Llama-3.2-1B-Instruct-Frog"
+model_path = "phamhai/Llama-3.2-3B-Instruct-Frog"
 tokenizer = AutoTokenizer.from_pretrained(model_path)
 model = AutoModelForCausalLM.from_pretrained(model_path)
+class ContextAwareChatbot:
+    def __init__(self,df, max_history: int = 5):
+        self.pipeline = pipeline
+        self.model = AutoModelForCausalLM.from_pretrained('phamhai/Llama-3.2-3B-Instruct-Frog')
+        self.tokenizer = AutoTokenizer.from_pretrained('phamhai/Llama-3.2-3B-Instruct-Frog')
+        self.max_history = max_history
+        self.conversation_history: List[Dict[str, str]] = []
+        self.df = df 
+    def _build_prompt(self) -> str:
+        # Build context from history
+        history_text = ""
+        for exchange in self.conversation_history[-self.max_history:]:
+            history_text += f"Human: {exchange['human']}\nAssistant: {exchange['assistant']}\n\n"
+        table = self.df 
+        # Create the full prompt with context
+        prompt = f"""Bạn là một trợ lí ảo thông minh có thể trả lời những câu hỏi của người dùng. Dựa vào thông tin có trong bảng dưới và đoạn hội thoại trong quá khứ, cố gắng trả lời câu hỏi người dùng một cách chính xác và trung thực nhất.
+        Bảng:
+        <START_OF_TABLE>
+        {table}
+        <END_OF_TABLE>
+        Đoạn chat trong quá khứ:
+        <START_OF_HISTORY_CONTEXT>
+        {history_text}
+        <END_OF_HISTORY_CONTEXT>
+        """
+        return prompt
+    
+    def _clean_response(self, response: str) -> str:
+        # Clean up the generated response
+        response = response.split("Assistant:")[-1].strip()
+        # Stop at any new "Human:" or "Assistant:" markers
+        if "Human:" in response:
+            response = response.split("Human:")[0].strip()
+        return response
+    
+    def chat(self, user_input: str) -> str:
+        # Generate the contextualized prompt
+        prompt = self._build_prompt()
+        
+#         # Generate response
+#         response = self.pipeline(
+#             prompt,
+#             return_full_text=False,
+#             clean_up_tokenization_spaces=True
+#         )[0]['generated_text']
+        
+#         # Clean the response
+#         cleaned_response = self._clean_response(response)
+        messages =[
+            {'role':'system',
+             'content':prompt}
+            ,
+            {'role':'user',
+             'content':user_input}
+        ]
+        tokenized_chat = self.tokenizer.apply_chat_template(messages, tokenize=True, add_generation_prompt=True, return_tensors='pt')
+        outputs = self.model.generate(tokenized_chat, max_new_tokens=256).to('cuda')
+        bot_response = self.tokenizer.decode(outputs[0])
+        bot_response = bot_response.split('<|start_header_id|>assistant<|end_header_id|>')
+        bot_response = bot_response[1].strip()[:-10]
+        # Update conversation history
+        self.conversation_history.append({
+            'human': user_input,
+            'assistant': bot_response
+        })
+        
+        return bot_response
 chat_history = []
 
 
@@ -148,14 +215,16 @@ chatbot_df = utils.format_table_for_chatbot(df)
 #                     ###Bảng:
 #                     {table}
 #                 """
+chatbot = ContextAwareChatbot(chatbot_df)
 
-prompt_template=""" Bạn là một trợ lí Tiếng Việt nhiệt tình và trung thực. Dựa vào thông tin có trong bảng dưới, hãy luôn trả lời một cách hữu ích nhất có thể, đồng thời giữ an toàn.
-Nếu một câu hỏi không có ý nghĩa hoặc không hợp lý về mặt thông tin, hãy giải thích tại sao thay vì trả lời một điều gì đó không chính xác, vui lòng không chia sẻ thông tin sai lệch.
-                    Nhiệm vụ: trả lời câu hỏi của người dùng dựa vào bảng cho dưới đây. Nếu câu hỏi không liên quan đến bảng, hãy bắt đầu bằng: "Tôi không thể tìm được dữ kiện trong bảng bạn cần tìm".
-                    Bảng:
-                    {table}
-                """
-system_prompt = prompt_template.format(table=chatbot_df)
+
+# prompt_template=""" Bạn là một trợ lí Tiếng Việt nhiệt tình và trung thực. Dựa vào thông tin có trong bảng dưới, hãy luôn trả lời một cách hữu ích nhất có thể, đồng thời giữ an toàn.
+# Nếu một câu hỏi không có ý nghĩa hoặc không hợp lý về mặt thông tin, hãy giải thích tại sao thay vì trả lời một điều gì đó không chính xác, vui lòng không chia sẻ thông tin sai lệch.
+#                     Nhiệm vụ: trả lời câu hỏi của người dùng dựa vào bảng cho dưới đây. Nếu câu hỏi không liên quan đến bảng, hãy bắt đầu bằng: "Tôi không thể tìm được dữ kiện trong bảng bạn cần tìm".
+#                     Bảng:
+#                     {table}
+#                 """
+# system_prompt = prompt_template.format(table=chatbot_df)
 @login_manager.user_loader
 def load_user(user_id):
     # since the user_id is just the primary key of our user table, use it in the query for the user
@@ -203,18 +272,19 @@ def chat():
     # inputs = tokenizer(input_text, return_tensors='pt')
     # outputs = model.generate(**inputs, max_new_tokens=128)
     # bot_response = tokenizer.decode(outputs[0], skip_special_tokens=True)
-    messages = [
-        {'role':'system',
-         'content': system_prompt}
-         ,{ 'role': 'user',
-             'content': user_message
-         }
-    ]
-    tokenized_chat = tokenizer.apply_chat_template(messages, tokenize=True, add_generation_prompt=True, return_tensors='pt')
-    outputs = model.generate(tokenized_chat, max_new_tokens=256)
-    bot_response = tokenizer.decode(outputs[0])
-    bot_response = bot_response.split('<|start_header_id|>assistant<|end_header_id|>')
-    bot_response = bot_response[1].strip()[:-10]
+    # messages = [
+    #     {'role':'system',
+    #      'content': system_prompt}
+    #      ,{ 'role': 'user',
+    #          'content': user_message
+    #      }
+    # ]
+    # tokenized_chat = tokenizer.apply_chat_template(messages, tokenize=True, add_generation_prompt=True, return_tensors='pt')
+    # outputs = model.generate(tokenized_chat, max_new_tokens=256)
+    # bot_response = tokenizer.decode(outputs[0])
+    # bot_response = bot_response.split('<|start_header_id|>assistant<|end_header_id|>')
+    # bot_response = bot_response[1].strip()[:-10]
+    response = chatbot.chat(user_message)
     # Append bot response to chat history
     chat_history.append({'timestamp': timestamp, 'bot': bot_response})
     
